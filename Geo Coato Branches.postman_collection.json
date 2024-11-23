@@ -1,0 +1,326 @@
+{
+	"info": {
+		"_postman_id": "dff9e810-2b40-4950-8584-7f5b7e2d0882",
+		"name": "Geo Coato Branches",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36662326"
+	},
+	"item": [
+		{
+			"name": "Geo Coato Branche",
+			"item": [
+				{
+					"name": "returns coato branch list per_page",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"let response = pm.response.json(); ",
+									"// 1. Javob obyekt ekanligini tekshirish",
+									"pm.test(\"Response is an object\", function () {",
+									"    pm.expect(response).to.be.an(\"object\");",
+									"});",
+									"",
+									"// responsda kelayotgan malumotlar 15tadan kelishi ",
+									"let data = response.data; ",
+									"let currentPage = response.data.current_page;",
+									"let totalElement = response.total;",
+									"let perPage = response.per_page;",
+									"",
+									"",
+									"pm.test(\"Har bir pagega 15tadan kelishi\", ()=>{",
+									"    if(perPage <= totalElement){",
+									"        perPage = response.data.data.length",
+									"    } else{",
+									"        perPage > response.data.data.length",
+									"    }",
+									"})",
+									"",
+									"",
+									"",
+									"   "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{hetk.uz}}/api/geo-coato-branches?order_column=created_at&order_type=desc&page=per_page=15",
+							"host": [
+								"{{hetk.uz}}"
+							],
+							"path": [
+								"api",
+								"geo-coato-branches"
+							],
+							"query": [
+								{
+									"key": "order_column",
+									"value": "created_at"
+								},
+								{
+									"key": "order_type",
+									"value": "desc"
+								},
+								{
+									"key": "page",
+									"value": "per_page=15"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "property must to have and not to be null",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();",
+									"pm.test(\"Response contains a data property\", function () {",
+									"    pm.expect(response).to.have.property(\"data\");",
+									"});",
+									"pm.test(\"ID NAME o'zgaruvchilar mavjud bo'lishi kerak\", function () {",
+									"    let response = pm.response.json();",
+									"    let data = response.data.data;",
+									"",
+									"    for (let i = 0; i < data.length; i++) {",
+									"        pm.expect(data[i]).to.have.property(\"id\").not.to.be.null;",
+									"        pm.expect(data[i]).to.have.property(\"name\").not.to.be.null;",
+									"    }",
+									"});",
+									"pm.test(\"consumers  o'zgaruvchilar mavjud bo'lishi kerak\", function () {",
+									"    let response = pm.response.json();",
+									"    let data = response.data.data;",
+									"",
+									"    for (let i = 0; i < data.length; i++) {",
+									"        pm.expect(data[i]).to.have.property(\"number_legal_consumers\").not.to.be.null;",
+									"        pm.expect(data[i]).to.have.property(\"number_household_consumers\").not.to.be.null;",
+									"    }",
+									"});",
+									"",
+									"pm.test(\"lon,lat  o'zgaruvchilar mavjud bo'lishi kerak\", function () {",
+									"    let response = pm.response.json();",
+									"    let data = response.data.data;",
+									"",
+									"    for (let i = 0; i < data.length; i++) {",
+									"        pm.expect(data[i]).to.have.property(\"lon\").not.to.be.null;",
+									"        pm.expect(data[i]).to.have.property(\"lat\").not.to.be.null;",
+									"    }",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{hetk.uz}}/api/geo-coato-branches",
+							"host": [
+								"{{hetk.uz}}"
+							],
+							"path": [
+								"api",
+								"geo-coato-branches"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filtr with parent_code",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"let response = pm.response.json(); ",
+									"let parentCode = pm.collectionVariables.get(\"parentCode\"); ",
+									"",
+									"pm.test(`All items have parent_code }`, function () {",
+									"    for (let i = 0; i < response.length; i++) {",
+									"        pm.expect(response[i].parent_code).to.eql(Number(parentCode)); ",
+									"    }",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{hetk.uz}}/api/geo-coato-branches?parent_code={{parentCode}}&order_column=created_at&order_type=desc&per_page=15",
+							"host": [
+								"{{hetk.uz}}"
+							],
+							"path": [
+								"api",
+								"geo-coato-branches"
+							],
+							"query": [
+								{
+									"key": "parent_code",
+									"value": "{{parentCode}}"
+								},
+								{
+									"key": "order_column",
+									"value": "created_at"
+								},
+								{
+									"key": "order_type",
+									"value": "desc"
+								},
+								{
+									"key": "per_page",
+									"value": "15"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();",
+									"let ID = pm.collectionVariables.get(\"id\")",
+									"pm.test(\"id is the same with response\", ()=>{",
+									"    pm.expect(response.data[0].id).to.eql(Number(ID));",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{hetk.uz}}/api/geo-coato-branches/{{id}}",
+							"host": [
+								"{{hetk.uz}}"
+							],
+							"path": [
+								"api",
+								"geo-coato-branches",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by code",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// urlda so'ralgan code bilan responseda kelgan kod bir xilligini tekshirish",
+									"let response = pm.response.json();",
+									"let CODE = pm.collectionVariables.get(\"code\")",
+									"pm.test(\"code is the same with response\", ()=>{",
+									"    pm.expect(response.data.code).to.eql(CODE.toString());",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{hetk.uz}}/api/geo-coato-branches/detail/{{code}}",
+							"host": [
+								"{{hetk.uz}}"
+							],
+							"path": [
+								"api",
+								"geo-coato-branches",
+								"detail",
+								"{{code}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.test(\"Status code is 200\", function () {",
+					"    pm.response.to.have.status(200);",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "nextRequest",
+			"value": ""
+		},
+		{
+			"key": "parentCode",
+			"value": "10000"
+		},
+		{
+			"key": "id",
+			"value": "67"
+		},
+		{
+			"key": "code",
+			"value": "10400"
+		}
+	]
+}
